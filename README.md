@@ -2,7 +2,7 @@
 
 ## 📦 Complete Project Package
 
-I've created a **complete end-to-end Machine Learning project** for Credit Card Fraud Detection following all the requirements. Here's what you have:
+I've created a **complete end-to-end Machine Learning project** for Credit Card Fraud Detection.
 
 ---
 
@@ -268,47 +268,6 @@ python-multipart==0.0.6
 joblib==1.3.1
 ```
 
----
-
-## 📄 .gitignore
-
-```
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Data
-data/raw/creditcard.csv
-data/processed/
-*.csv
-
-# Models
-models/*.pkl
-models/*.joblib
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-logs/
-*.log
-```
 
 ---
 
@@ -370,7 +329,7 @@ git push heroku main
 
 ---
 
-## 📞 Next Steps
+## 📄 Next Steps
 
 1. **Download Dataset** - Get creditcard.csv from Kaggle
 2. **Create Project Structure** - Use the file tree above
@@ -438,7 +397,3 @@ This project includes:
 - [SMOTE Paper](https://arxiv.org/abs/1106.1813)
 
 ---
-
-**🎉 You now have a complete, production-ready ML project!**
-
-Good luck with your project! 🚀
