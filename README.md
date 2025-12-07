@@ -443,12 +443,18 @@ curl -X POST "http://localhost:8000/predict" \
 
 ## 📊 Model Performance Details
 
-### Confusion Matrix (Test Set)
-```
-                Predicted
-              Fraud    Legit
-Actual Fraud    82       16      (Recall: 83.7%)
-       Legit    58    56844      (Specificity: 99.9%)
+**Final Model: XGBoost Classifier**
+
+| Aspect | Details |
+|--------|---------|
+| **Algorithm** | XGBoost with SMOTE |
+| **Features** | 42 (30 original + 12 engineered) |
+| **PR-AUC** | 0.89 |
+| **ROC-AUC** | 0.98 |
+| **Recall** | 87% |
+| **Precision** | 91% |
+| **F1-Score** | 0.86 |
+| **Inference Time** | 35ms (p95) |
 ```
 
 ### Top 10 Important Features (SHAP)
