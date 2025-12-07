@@ -293,8 +293,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📧 Contact
 **Salih Bulut**
 - Email: salihbulut1@gmail.com
-- LinkedIn: [your-profile](https://linkedin.com/in/salihbulutt)
-- GitHub: [@yourusername](https://github.com/salihbulutt)
+- LinkedIn: [salihbulutt](https://linkedin.com/in/salihbulutt)
+- GitHub: [@salihbulutt](https://github.com/salihbulutt)
 
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
