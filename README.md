@@ -142,17 +142,30 @@ credit-card-fraud-detection/
 ### 1. Problem Definition
 Credit card fraud detection with extreme class imbalance (0.172% fraud rate). The goal is to maximize fraud detection (Recall) while maintaining acceptable precision to avoid overwhelming fraud analysts with false positives.
 
-### 2. Baseline Performance
-- **Model:** Logistic Regression with standard scaling
-- **Features:** All 30 features (V1-V28, Time, Amount)
-- **Performance:** PR-AUC = 0.72, ROC-AUC = 0.92
-- **Key Insight:** Standard metrics like accuracy (99.8%) are misleading due to imbalance
+### 2. Baseline Process & Score
+- **Model:** Logistic Regression with balanced class weights
+- **Features:** 29 features (V1-V28 + Amount)
+- **Preprocessing:** StandardScaler
+- **Validation:** Stratified 5-fold CV
+- **Baseline Scores:**
+  - PR-AUC: **0.72**
+  - ROC-AUC: **0.92**
+  - F1-Score: **0.71**
+  - Recall: **0.76**
+  - Precision: **0.67**
 
-### 3. Feature Engineering Results
-- **Time-based features:** Hour of day, day period (improved detection of time-based patterns)
-- **Amount-based features:** Log transformation, amount bins, z-score normalization
-- **Statistical features:** Rolling statistics, interaction features
-- **Impact:** PR-AUC improved from 0.72 → 0.81 (+12.5%)
+### 3. Feature Engineering Experiments & Results
+
+**Experiments Conducted:**
+
+| Feature Type | Features Created | Impact on PR-AUC |
+|-------------|------------------|------------------|
+| Time-based | hour_of_day, is_night, is_business_hours | +0.04 (+5.6%) |
+| Amount-based | amount_log, amount_zscore, is_large/small_transaction | +0.05 (+6.9%) |
+| Interactions | V1×V2, V14×V17, V12×V14 | +0.03 (+4.2%) |
+| **Combined** | All above features | **+0.09 (+12.5%)** |
+
+**Final Feature Set:** 42 features (30 original + 12 engineered)
 
 ### 4. Validation Strategy
 **Stratified Time-Series Split (5-fold)**
