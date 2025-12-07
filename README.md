@@ -440,8 +440,18 @@ curl -X POST "http://localhost:8000/predict" \
   -H "Content-Type: application/json" \
   -d '{"V1": -1.35, "V2": 1.57, ..., "Amount": 149.62}'
 ```
+---
 
-## 📊 Model Performance Details
+## 🧪 Testing
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=src --cov-report=html
+```
+## 📊 Model Performance Summary
 
 **Final Model: XGBoost Classifier**
 
@@ -455,20 +465,46 @@ curl -X POST "http://localhost:8000/predict" \
 | **Precision** | 91% |
 | **F1-Score** | 0.86 |
 | **Inference Time** | 35ms (p95) |
-```
 
-### Top 10 Important Features (SHAP)
-1. V14 - Most discriminative PCA component
-2. V17 - Strong fraud indicator
-3. V12 - Transaction pattern feature
-4. V10 - Behavioral anomaly detector
-5. Amount_log - Transaction amount (log-scaled)
-6. ...
+---
 
-## 🧪 Testing
-```bash
-pytest tests/ -v
-```
+## 🎓 Key Learnings
+
+1. **Class Imbalance:** Standard accuracy is meaningless; use PR-AUC
+2. **Feature Engineering:** Simple features (time, amount) add significant value
+3. **Validation Strategy:** Time-based split crucial for realistic estimates
+4. **Business Alignment:** Technical metrics must map to business value
+5. **Monitoring:** Production ML requires extensive monitoring infrastructure
+
+---
+
+## 🔮 Future Improvements
+
+1. **Advanced Features:**
+   - Transaction velocity (transactions per hour)
+   - Merchant category codes
+   - Geographic location patterns
+   - Device fingerprinting
+
+2. **Model Enhancements:**
+   - Ensemble methods (stacking)
+   - Deep learning (LSTM for sequences)
+   - Online learning for real-time adaptation
+   - Anomaly detection techniques
+
+3. **Production Optimizations:**
+   - Model serving infrastructure (TensorFlow Serving)
+   - Feature store (Feast)
+   - A/B testing framework
+   - Automated retraining pipeline
+
+4. **Business Integration:**
+   - Customer risk scoring
+   - Dynamic thresholds based on risk appetite
+   - Integration with fraud investigation tools
+   - Feedback loop from fraud analysts
+
+---
 
 ## 📝 Documentation
 Detailed documentation available in `/docs`:
