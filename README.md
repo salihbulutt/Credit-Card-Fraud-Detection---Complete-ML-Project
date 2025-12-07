@@ -65,6 +65,22 @@ Credit card fraud costs the financial industry billions annually. Banks need an 
 - **Docker** - Containerization
 - **GitHub Actions** - CI/CD
 
+## 🔄 Complete Pipeline Structure
+
+```
+1. EDA (Exploratory Data Analysis)
+   ↓
+2. Baseline Model (Logistic Regression)
+   ↓
+3. Feature Engineering
+   ↓
+4. Model Optimization (XGBoost)
+   ↓
+5. Model Evaluation
+   ↓
+6. Final Pipeline & Deployment
+```
+
 ## 📁 Repository Structure
 
 ```
