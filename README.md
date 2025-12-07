@@ -4,7 +4,18 @@
 This project is an end-to-end machine learning solution developed as part of the **Machine Learning Bootcamp**. It addresses the critical problem of credit card fraud detection in the banking and financial services sector.
 
 ### Problem Statement
-Credit card fraud is a major concern for financial institutions, with billions of dollars lost annually. Early detection of fraudulent transactions is crucial to minimize losses and protect customers. This project aims to build a robust machine learning model that can identify fraudulent transactions in real-time with high precision and recall.
+**Business Problem:**
+Credit card fraud costs the financial industry billions annually. Banks need an automated system to:
+- Detect fraudulent transactions in real-time
+- Minimize false positives (legitimate transactions blocked)
+- Maximize fraud detection rate
+- Provide explainable predictions for compliance
+
+**Technical Challenge:**
+- Extreme class imbalance (0.172% fraud rate = 1:578 ratio)
+- Need for high recall without sacrificing precision
+- Real-time prediction requirements (<100ms latency)
+- PCA-transformed features limit interpretability
 
 ## 🚀 Live Demo
 **Deployment Link:** [Streamlit App](https://fraud-detection-app.streamlit.app)
