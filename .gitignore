@@ -33,13 +33,6 @@ env/
 *.ipynb_checkpoints/
 
 # Data
-# Ignore all files in the data directory (example rule)
-data/
-
-# EXCEPTION: We need to track the creditcard data with Git LFS
-!data/raw/creditcard.csv
-data/raw/*.csv
-data/processed/*.csv
 *.parquet
 *.feather
 *.h5
