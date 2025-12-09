@@ -283,7 +283,7 @@ You can deploy using Streamlit Cloud:
   - Python version and requirements from requirements.txt
 - Add the live URL here:
 
-[Live Demo](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+[Live Demo](https://credit-card-fraud-detection---complete-ml-project-sa4bolihnb3r.streamlit.app/)
 
 ---
 
