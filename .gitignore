@@ -1,147 +1,26 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Virtual Environment
-venv/
-ENV/
+# Virtual environment
+.venv/
 env/
-.venv
+venv/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb_checkpoints/
+# Python cache
+__pycache__/
+*.pyc
 
-# Data
-*.parquet
-*.feather
-*.h5
-*.hdf5
+# Jupyter checkpoints
+.ipynb_checkpoints/
 
-# Models
+# Models and data
 models/*.pkl
 models/*.joblib
-models/*.h5
-models/*.pt
-models/*.pth
-models/*.onnx
-!models/.gitkeep
+models/*.json
 
-# Logs
-logs/*.log
-*.log
-logs/mlruns/
-wandb/
+data/processed/*
+!data/raw/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Streamlit cache
+.streamlit/
+
+# OS files
 .DS_Store
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.nox/
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-
-# MLflow
-mlruns/
-mlartifacts/
-
-# Optuna
-optuna_study.db
-
-# System files
 Thumbs.db
-.DS_Store
-
-# Documentation builds
-docs/_build/
-site/
-
-# Streamlit
-.streamlit/secrets.toml
-.streamlit/config.toml
-
-# Large files (use Git LFS instead)
-*.zip
-*.tar.gz
-*.rar
-
-# Compiled files
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
-
-# Package files
-*.jar
-*.war
-*.nar
-*.ear
-*.tar
-*.rar
-
-# Credentials and secrets
-*.pem
-*.key
-credentials.json
-secrets.yaml
-
-# Docker
-*.dockerignore
-docker-compose.override.yml
-
-# Cache
-.cache/
-*.cache
-
-# MacOS
-.AppleDouble
-.LSOverride
-._*
-
-# Windows
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# Linux
-.directory
-.Trash-*

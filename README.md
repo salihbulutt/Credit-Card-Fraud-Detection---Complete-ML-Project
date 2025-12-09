@@ -88,53 +88,40 @@ credit-card-fraud-detection/
 ├── .gitignore
 ├── README.md
 ├── requirements.txt
-├── Dockerfile
-├── .github/
-│   └── workflows/
-│       └── deploy.yml
 ├── data/
-│   ├── raw/
-│   │   └── creditcard.csv
-│   └── processed/
-│       ├── train.csv
-│       └── test.csv
+│   ├── raw/            # Raw input data (creditcard.csv)
+│   └── processed/      # Any processed / intermediate files
 ├── notebooks/
-│   ├── 01_EDA.ipynb
-│   ├── 02_Baseline.ipynb
-│   ├── 03_Feature_Engineering.ipynb
-│   ├── 04_Model_Optimization.ipynb
-│   ├── 05_Model_Evaluation.ipynb
-│   └── 06_Final_Pipeline.ipynb
+│   ├── 01_eda.ipynb                # Exploratory Data Analysis
+│   ├── 02_baseline.ipynb           # Baseline model
+│   ├── 03_feature_engineering.ipynb
+│   ├── 04_model_optimization.ipynb
+│   ├── 05_model_evaluation.ipynb
+│   └── 06_pipeline.ipynb           # Final pipeline run
 ├── src/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── data_preprocessing.py
-│   ├── feature_engineering.py
-│   ├── model_trainer.py
-│   ├── inference.py
-│   ├── pipeline.py
-│   └── utils.py
-├── models/
-│   ├── final_model.pkl
-│   ├── scaler.pkl
-│   └── feature_selector.pkl
+│   ├── config.py        # Paths, settings, business rules
+│   ├── data_prep.py     # Load & split data, preprocessing
+│   ├── features.py      # (Optional) Feature engineering helpers
+│   ├── models.py        # Model definitions (baseline, RF, XGB)
+│   ├── pipeline.py      # Full training pipeline
+│   ├── inference.py     # Load model & run predictions
+│   ├── utils.py         # Metrics, threshold selection, helpers
+│   └── __init__.py
 ├── app/
-│   ├── app.py (Streamlit)
-│   └── api.py (FastAPI)
-├── tests/
-│   ├── test_preprocessing.py
-│   ├── test_features.py
-│   └── test_inference.py
+│   └── app.py           # Streamlit app (frontend)
+├── models/
+│   ├── fraud_model.pkl      # Trained model + preprocessing
+│   ├── preprocessor.pkl
+│   └── threshold.json       # Chosen decision threshold
 ├── docs/
-│   ├── EDA_findings.md
-│   ├── baseline_results.md
-│   ├── feature_engineering.md
+│   ├── eda.md
+│   ├── baseline.md
+│   ├── feature_eng.md
 │   ├── model_optimization.md
-│   ├── evaluation_report.md
-│   └── deployment_guide.md
-└── assets/
-    ├── demo.gif
-    └── confusion_matrix.png
+│   ├── evaluation.md
+│   └── pipeline.md
+└── tests/
+    └── test_pipeline.py
 ```
 
 ## 🔍 Key Findings & Decisions
