@@ -3,6 +3,8 @@
 ## About The Project
 This project is an end-to-end machine learning solution developed as part of the **Machine Learning Bootcamp**. It addresses the critical problem of credit card fraud detection in the banking and financial services sector.
 
+**👉 [Try the Application](https://credit-card-fraud-detection---complete-ml-project-sa4bolihnb3r.streamlit.app/)**
+
 ### Problem Statement
 **Business Problem:**
 Credit card fraud costs the financial industry billions annually. Banks need an automated system to:
@@ -283,8 +285,6 @@ You can deploy using Streamlit Cloud:
   - Python version and requirements from requirements.txt
 - Add the live URL here:
 
-[Live Demo](https://credit-card-fraud-detection---complete-ml-project-sa4bolihnb3r.streamlit.app/)
-
 ---
 
 ## 🧪 Tests
@@ -373,6 +373,34 @@ Detailed documentation available in `/docs`:
 - [Feature Engineering](docs/feature_eng.md)
 - [Model Evaluation](docs/evaluation.md)
 - [Model Optimization](docs/model_optimization.md)
+
+## 🗂️ Project Roadmap (TODO)
+
+### ✅ Completed
+- [x] Project structure setup (src/, notebooks/, app/, docs/, tests/)
+- [x] Exploratory Data Analysis (EDA)
+- [x] Baseline model development (Logistic Regression)
+- [x] Feature engineering experiments (Log-Amount, SMOTE)
+- [x] Model optimization (RandomForest + XGBoost tuning)
+- [x] Final model selection (XGBoost)
+- [x] SHAP-based feature importance analysis
+- [x] Final ML pipeline implementation (`src/pipeline.py`)
+- [x] Trained model artifact generation (`models/`)
+- [x] Streamlit web application (`app/app.py`)
+- [x] Documentation (EDA, Baseline, Feature Eng., Model Opt., Evaluation, Pipeline)
+- [x] Streamlit Cloud deployment setup
+- [x] README enhancement with project description & architecture
+
+---
+
+### 🚀 In Progress / Next Steps
+- [ ] Docker containerization of full ML system  
+- [ ] Docker Compose for local multi-service development  
+- [ ] CI pipeline for automated tests (pytest + GitHub Actions)  
+- [ ] CD pipeline for auto-deploying Streamlit app  
+- [ ] Model registry integration (MLflow or DVC)
+
+---
 
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
