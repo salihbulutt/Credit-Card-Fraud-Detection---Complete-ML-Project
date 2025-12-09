@@ -32,9 +32,9 @@ st.write(
     """
 )
 
-tab_single, tab_batch = st.tabs(["Single Transaction", "Batch Prediction"])
+tab1, tab2, tab3 = st.tabs(["Single Prediction", "Batch Prediction", "About PCA"])
 
-with tab_single:
+with tab1:
     st.subheader("Single Transaction Inference")
     st.write(
         "Enter transaction details below. For PCA features (V1–V28), you can keep them at 0.0 "
@@ -71,7 +71,7 @@ with tab_single:
         else:
             st.success("✅ This transaction is likely LEGITIMATE.")
 
-with tab_batch:
+with tab2:
     st.subheader("Batch CSV Prediction")
     st.write(
         """
@@ -108,7 +108,8 @@ with tab_batch:
                     file_name="fraud_predictions.csv",
                     mime="text/csv"
                 )
-with st.expander("ℹ️ What are the PCA components (V1–V28)?"):
+with tab3:
+    st.header("ℹ️ Understanding PCA Components (V1–V28)")
     st.markdown("""
 ### 🔍 What Are the PCA Components (V1–V28)?
 
