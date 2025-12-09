@@ -108,3 +108,64 @@ with tab_batch:
                     file_name="fraud_predictions.csv",
                     mime="text/csv"
                 )
+with st.expander("ℹ️ What are the PCA components (V1–V28)?"):
+    st.markdown("""
+### 🔍 What Are the PCA Components (V1–V28)?
+
+The features **V1, V2, ..., V28** in this dataset are **not original transaction fields**.  
+They are **anonymized PCA components**, created by applying *Principal Component Analysis (PCA)* on confidential credit card data.
+
+---
+
+### 🔐 Why PCA?
+Banks cannot share sensitive transaction details like merchant category, customer profile, location, etc.  
+So researchers replaced those features with **mathematical transformations** that:
+- Protect privacy  
+- Reduce dimensionality  
+- Capture important fraud patterns  
+
+---
+
+### 🧠 What does a PCA component represent?
+
+A PCA component is a **compressed mixture** of many original transaction attributes.
+
+It is **not interpretable** as:
+- Merchant  
+- Country  
+- User income  
+- Card type  
+- Risk level  
+
+Instead, it represents a direction in the data that explains variation.
+
+Think of it like compressing a photo:
+- You lose the original pixels  
+- But important structure is kept  
+
+---
+
+### 📉 Why do PCA features help fraud detection?
+
+Fraud often appears as:
+- Unusual spending behavior  
+- Irregular transaction timing  
+- Deviations from past patterns  
+
+PCA transforms the data so these anomalies **stand out clearly**.
+
+This is why components like **V14, V17, V4** often become important indicators of fraud.
+
+---
+
+### 🧭 Summary
+
+| Question | Answer |
+|---------|--------|
+| What are V1–V28? | PCA-transformed features |
+| Why used? | Privacy protection + signal extraction |
+| Can we interpret them? | No — they are abstract math components |
+| Are they useful? | Yes — they capture fraud-driven patterns |
+
+PCA allows sharing the dataset **without exposing sensitive bank data** while keeping the underlying fraud signals intact.
+    """)
