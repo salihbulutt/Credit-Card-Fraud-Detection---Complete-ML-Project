@@ -10,11 +10,6 @@ __pycache__/
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
-# Models and data
-models/*.pkl
-models/*.joblib
-models/*.json
-
 data/processed/*
 !data/raw/
 
