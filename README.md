@@ -17,10 +17,6 @@ Credit card fraud costs the financial industry billions annually. Banks need an 
 - Real-time prediction requirements (<100ms latency)
 - PCA-transformed features limit interpretability
 
-## 🚀 Live Demo
-**Deployment Link:** [Streamlit App](https://fraud-detection-app.streamlit.app)
-
-![Fraud Detection Demo](assets/demo.gif)
 
 ## 📊 Project Overview
 
@@ -31,55 +27,41 @@ Credit card fraud costs the financial industry billions annually. Banks need an 
 - **Primary Metric:** PR-AUC (Precision-Recall AUC)
 - **Business Metric:** Recall (to catch frauds) & Precision (to minimize false alarms)
 
-### Dataset Characteristics
-- **Source:** [Kaggle - Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
-- **Fraud Rate:** 0.172% (Highly Imbalanced Dataset)
-- **Features:** PCA-transformed features (V1-V28), Time, Amount
-- **Challenge:** Extreme class imbalance requires careful handling
+### 🧬 Dataset
 
-### Performance Metrics
-| Metric | Baseline | Final Model | Improvement |
-|--------|----------|-------------|-------------|
-| PR-AUC | 0.72 | 0.89 | +23.6% |
-| ROC-AUC | 0.92 | 0.98 | +6.5% |
-| Recall@90%Precision | 0.68 | 0.84 | +23.5% |
-| F1-Score | 0.71 | 0.86 | +21.1% |
+- **Source:** ULB Machine Learning Group (via Kaggle)
+- **Rows:** 284,807
+- **Fraud cases:** 492
+- **Fraud rate:** ≈ 0.172%
+- **Features:**
+  - `Time` – seconds elapsed between each transaction and the first transaction  
+  - `Amount` – transaction amount  
+  - `V1`–`V28` – anonymized PCA components  
+  - `Class` – 1 (fraud) / 0 (legitimate)
 
-## 🛠️ Technologies Used
+There are **no missing values**, and most signal is encoded in PCA components.
 
-### Core ML Stack
-- **Python 3.10+**
-- **scikit-learn** - Model training and evaluation
-- **XGBoost / LightGBM** - Gradient boosting models
-- **Imbalanced-learn** - Handling class imbalance
-- **Optuna** - Hyperparameter optimization
+### 📏 Metrics & Business Constraints
 
-### Data & Visualization
-- **Pandas & NumPy** - Data manipulation
-- **Matplotlib & Seaborn** - Visualization
-- **SHAP** - Model interpretability
+Because of extreme imbalance, **accuracy** is misleading. We focus on:
 
-### Deployment
-- **Streamlit** - Web interface
-- **FastAPI** - REST API
-- **Docker** - Containerization
-- **GitHub Actions** - CI/CD
+### Primary metrics
 
-## 🔄 Complete Pipeline Structure
+- **PR-AUC (Average Precision)**
+- **Recall at a minimum precision level (business threshold)**
 
-```
-1. EDA (Exploratory Data Analysis)
-   ↓
-2. Baseline Model (Logistic Regression)
-   ↓
-3. Feature Engineering
-   ↓
-4. Model Optimization (XGBoost)
-   ↓
-5. Model Evaluation
-   ↓
-6. Final Pipeline & Deployment
-```
+Business requirement (example):
+
+> ✅ Precision must be at least **0.90** for fraud predictions.  
+> Among the transactions we flag as fraud, at least 90% should truly be fraud.
+
+### Secondary metrics
+
+- ROC-AUC  
+- F1-score  
+- Confusion matrix  
+
+The **decision threshold** is selected on the validation set to satisfy the precision constraint while maximizing recall.
 
 ## 📁 Repository Structure
 
@@ -89,109 +71,87 @@ credit-card-fraud-detection/
 ├── README.md
 ├── requirements.txt
 ├── data/
-│   ├── raw/            # Raw input data (creditcard.csv)
-│   └── processed/      # Any processed / intermediate files
+│   ├── raw/
+│   │   └── creditcard.csv        # Kaggle dataset (not tracked in git)
+│   └── processed/                # (optional) intermediate files
 ├── notebooks/
-│   ├── 01_eda.ipynb                # Exploratory Data Analysis
-│   ├── 02_baseline.ipynb           # Baseline model
+│   ├── 01_eda.ipynb              # Exploratory Data Analysis
+│   ├── 02_baseline.ipynb         # Baseline model
 │   ├── 03_feature_engineering.ipynb
 │   ├── 04_model_optimization.ipynb
 │   ├── 05_model_evaluation.ipynb
-│   └── 06_pipeline.ipynb           # Final pipeline run
+│   └── 06_pipeline.ipynb         # Runs final pipeline
 ├── src/
-│   ├── config.py        # Paths, settings, business rules
-│   ├── data_prep.py     # Load & split data, preprocessing
-│   ├── features.py      # (Optional) Feature engineering helpers
-│   ├── models.py        # Model definitions (baseline, RF, XGB)
-│   ├── pipeline.py      # Full training pipeline
-│   ├── inference.py     # Load model & run predictions
-│   ├── utils.py         # Metrics, threshold selection, helpers
-│   └── __init__.py
+│   ├── __init__.py
+│   ├── config.py                 # Paths, constants, business rules
+│   ├── data_prep.py              # Load & split data, preprocessing
+│   ├── features.py               # (Optional) extra feature functions
+│   ├── models.py                 # Baseline, RF, XGBoost definitions
+│   ├── utils.py                  # Metrics, threshold selection, helpers
+│   ├── pipeline.py               # Final training pipeline
+│   └── inference.py              # Model service for app/API
 ├── app/
-│   └── app.py           # Streamlit app (frontend)
+│   ├── __init__.py
+│   └── app.py                    # Streamlit frontend
 ├── models/
-│   ├── fraud_model.pkl      # Trained model + preprocessing
+│   ├── fraud_model.pkl           # Trained pipeline (preproc + model)
 │   ├── preprocessor.pkl
-│   └── threshold.json       # Chosen decision threshold
+│   └── threshold.json            # Chosen decision threshold
 ├── docs/
-│   ├── eda.md
-│   ├── baseline.md
-│   ├── feature_eng.md
-│   ├── model_optimization.md
-│   ├── evaluation.md
-│   └── pipeline.md
+│   ├── eda.md                    # EDA findings
+│   ├── baseline.md               # Baseline process & scores
+│   ├── feature_eng.md            # Feature engineering attempts
+│   ├── model_optimization.md     # Hyperparameter tuning summary
+│   ├── evaluation.md             # Final evaluation & business fit
+│   └── pipeline.md               # End-to-end pipeline description
 └── tests/
-    └── test_pipeline.py
+    ├── test_pipeline.py          # Checks training pipeline artifacts
+    ├── test_inference.py         # Checks inference service
+    └── test_imports.py           # Simple import sanity check
 ```
 
 ## 🔍 Key Findings & Decisions
 
-### 1. Problem Definition
+### 1. Problem Definition & EDA
 Credit card fraud detection with extreme class imbalance (0.172% fraud rate). The goal is to maximize fraud detection (Recall) while maintaining acceptable precision to avoid overwhelming fraud analysts with false positives.
-
+- Inspect dataset structure and distributions
+- Analyze class imbalance
+- Explore Amount and Time distributions
+- Study correlations between features
+- Summarize key findings in docs/eda.md
+- 
 ### 2. Baseline Process & Score
-- **Model:** Logistic Regression with balanced class weights
-- **Features:** 29 features (V1-V28 + Amount)
-- **Preprocessing:** StandardScaler
-- **Validation:** Stratified 5-fold CV
-- **Baseline Scores:**
-  - PR-AUC: **0.72**
-  - ROC-AUC: **0.92**
-  - F1-Score: **0.71**
-  - Recall: **0.76**
-  - Precision: **0.67**
+- Model: Logistic Regression (class_weight="balanced")
+- Preprocessing: scale Time and Amount
+- Evaluate ROC-AUC & PR-AUC
+- Provide first reference scores
+- Document results in docs/baseline.md
 
 ### 3. Feature Engineering Experiments & Results
 
-**Experiments Conducted:**
+- Try log(Amount+1) to reduce skew
+- Experiment with SMOTE oversampling
+- Evaluate improvements in PR-AUC
+- Document experiments & results in docs/feature_eng.md
 
-| Feature Type | Features Created | Impact on PR-AUC |
-|-------------|------------------|------------------|
-| Time-based | hour_of_day, is_night, is_business_hours | +0.04 (+5.6%) |
-| Amount-based | amount_log, amount_zscore, is_large/small_transaction | +0.05 (+6.9%) |
-| Interactions | V1×V2, V14×V17, V12×V14 | +0.03 (+4.2%) |
-| **Combined** | All above features | **+0.09 (+12.5%)** |
+### 4. Model Optimization
 
-**Final Feature Set:** 42 features (30 original + 12 engineered)
+- Tune:
+   - RandomForestClassifier
+   - XGBClassifier (XGBoost)
+- Use RandomizedSearchCV with StratifiedKFold and scoring = average_precision
+- Compare models and pick XGBoost as final
+- Document best params & selection in docs/model_optimization.md
 
-### 4. Validation Schema & Rationale
+### 5. Evaluation
 
-**Selected Strategy:** Stratified Time-Series Split (5-fold)
+- Evaluate final model on validation & test sets
+- Plot ROC and Precision–Recall curves
+- Apply SHAP to interpret most influential features
+- Analyze and select decision threshold to satisfy precision constraint
+- Document business-fit analysis in docs/evaluation.md
 
-**Reasons:**
-1. **Stratification:** Maintains fraud rate (~0.172%) in each fold
-2. **Time-based:** Prevents data leakage - validates on "future" transactions
-3. **Realistic:** Mimics production scenario (predict future from past)
-4. **Robust:** 5 folds provide stable performance estimates
-
-**Why not standard K-Fold?**
-- Would mix past and future transactions (unrealistic)
-- Could lead to overoptimistic performance estimates
-
-### 5. Final Pipeline Feature Selection
-
-**Selection Criteria:**
-1. **SHAP importance** > 0.001 (removes noise features)
-2. **Business relevance** (Amount, time-based features)
-3. **Model performance** (tested feature subsets)
-4. **Correlation check** (removed highly correlated redundant features)
-
-**Feature Selection Method:**
-```python
-1. Train XGBoost with all features
-2. Calculate SHAP values
-3. Rank features by mean |SHAP value|
-4. Select top 42 features
-5. Validate: performance should not degrade
-```
-
-**Preprocessing Strategy:**
-- **RobustScaler** for Amount (handles outliers better than StandardScaler)
-- **StandardScaler** for PCA features (already normalized)
-- **SMOTE** (0.3 ratio) on training set only
-- **No scaling** for binary engineered features
-
-### 6. Final vs Baseline Performance Comparison
+### 6. Final Pipeline
 
 | Metric | Baseline | Final Model | Improvement |
 |--------|----------|-------------|-------------|
