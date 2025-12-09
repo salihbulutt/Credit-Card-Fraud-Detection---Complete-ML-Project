@@ -17,6 +17,7 @@ Credit card fraud costs the financial industry billions annually. Banks need an 
 - Real-time prediction requirements (<100ms latency)
 - PCA-transformed features limit interpretability
 
+---
 
 ## 📊 Project Overview
 
@@ -62,6 +63,8 @@ Business requirement (example):
 - Confusion matrix  
 
 The **decision threshold** is selected on the validation set to satisfy the precision constraint while maximizing recall.
+
+---
 
 ## 📁 Repository Structure
 
@@ -110,6 +113,8 @@ credit-card-fraud-detection/
     └── test_imports.py           # Simple import sanity check
 ```
 
+---
+
 ## 🔍 Key Findings & Decisions
 
 ### 1. Problem Definition & EDA
@@ -119,7 +124,7 @@ Credit card fraud detection with extreme class imbalance (0.172% fraud rate). Th
 - Explore Amount and Time distributions
 - Study correlations between features
 - Summarize key findings in docs/eda.md
-- 
+
 ### 2. Baseline Process & Score
 - Model: Logistic Regression (class_weight="balanced")
 - Preprocessing: scale Time and Amount
@@ -153,265 +158,174 @@ Credit card fraud detection with extreme class imbalance (0.172% fraud rate). Th
 
 ### 6. Final Pipeline
 
-| Metric | Baseline | Final Model | Improvement |
-|--------|----------|-------------|-------------|
-| **PR-AUC** | 0.72 | 0.89 | +23.6% |
-| **ROC-AUC** | 0.92 | 0.98 | +6.5% |
-| **Recall** | 0.76 | 0.87 | +14.5% |
-| **Precision** | 0.67 | 0.91 | +35.8% |
-| **F1-Score** | 0.71 | 0.86 | +21.1% |
-| **False Positives (per 10k)** | 95 | 58 | -38.9% |
-
-**Key Improvements:**
-- ✅ **23.6% better PR-AUC** (most important metric for imbalanced data)
-- ✅ **14.5% more frauds caught** (better recall)
-- ✅ **35.8% more accurate alerts** (better precision)
-- ✅ **38.9% fewer false alarms** (reduces investigation workload)
-
-### 7. Business Requirements Alignment
-
-**Requirements vs Actual Performance:**
-
-| Requirement | Target | Achieved | Status |
-|------------|--------|----------|--------|
-| Minimum Recall | 80% | 87% | ✅ **PASS** |
-| Minimum Precision | 85% | 91% | ✅ **PASS** |
-| Max False Positive Rate | 2% | 1.02% | ✅ **PASS** |
-| Prediction Latency | <100ms | 35ms | ✅ **PASS** |
-| Model Explainability | Required | SHAP values | ✅ **PASS** |
-
-**Business Value:**
-- **Cost Savings:** $847,000 annually (based on fraud prevention)
-- **Customer Experience:** 39% fewer legitimate transactions blocked
-- **Operational Efficiency:** Reduced false alerts = less analyst time wasted
-- **Compliance:** Explainable predictions via SHAP
-
-**Trade-offs:**
-- ⚖️ Higher computational cost (XGBoost vs Logistic Regression)
-- ⚖️ Requires monthly retraining to adapt to new fraud patterns
-- ⚖️ Model complexity reduces interpretability slightly
-
-### 8. Production Deployment Strategy
-
-**How the Model Goes to Production:**
-
-```
-┌─────────────────┐
-│ Training Phase  │
-│ (Offline)       │
-└────────┬────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 1. Data Collection         │
-│    - Batch processing      │
-│    - Feature store         │
-└────────┬───────────────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 2. Model Training          │
-│    - Run pipeline.py       │
-│    - Save artifacts        │
-│    - Version control       │
-└────────┬───────────────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 3. Model Validation        │
-│    - A/B test              │
-│    - Shadow mode           │
-│    - Performance check     │
-└────────┬───────────────────┘
-         │
-         ↓
-┌─────────────────┐
-│ Production      │
-│ (Online)        │
-└────────┬────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 4. Deployment              │
-│    - Docker container      │
-│    - Kubernetes/AWS        │
-│    - Load balancer         │
-└────────┬───────────────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 5. Real-time Inference     │
-│    - API endpoint          │
-│    - <100ms latency        │
-│    - Fraud probability     │
-└────────┬───────────────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 6. Decision & Action       │
-│    - Auto-block (>95%)     │
-│    - Manual review (50-95%)│
-│    - Auto-approve (<50%)   │
-└────────┬───────────────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 7. Monitoring & Logging    │
-│    - Performance metrics   │
-│    - Data drift detection  │
-│    - Alert on degradation  │
-└────────┬───────────────────┘
-         │
-         ↓
-┌────────────────────────────┐
-│ 8. Feedback Loop           │
-│    - Collect labels        │
-│    - Trigger retraining    │
-│    - Continuous improvement│
-└────────────────────────────┘
-```
-
-**Monitoring Metrics:**
-
-**Model Performance:**
-- **Daily PR-AUC:** Should stay above 0.85
-- **False Positive Rate:** Alert if exceeds 1.5%
-- **Fraud Detection Rate:** Track % of actual frauds caught
-- **Prediction Latency:** p95 should be <50ms
-
-**Data Quality:**
-- **PSI (Population Stability Index):** Alert if PSI > 0.2
-  - Measures feature distribution drift
-- **Fraud Rate Trend:** Alert if changes by >50%
-- **Missing Values:** Should remain at 0%
-- **Feature Range Check:** Outliers beyond training range
-
-**Business Metrics:**
-- **Dollar Amount Saved:** Tracked weekly
-- **False Alarm Rate:** Per analyst workload
-- **Customer Complaints:** Blocked legitimate transactions
-- **Investigation Efficiency:** Time per alert
-
-**System Health:**
-- **API Uptime:** >99.9% availability
-- **Request Volume:** Capacity planning
-- **Error Rate:** <0.1% failed predictions
-- **Resource Utilization:** CPU/memory usage
-
-**Alerting Thresholds:**
-```python
-ALERTS = {
-    "pr_auc_drop": 0.85,           # Alert if below
-    "data_drift_psi": 0.2,          # Alert if above
-    "false_positive_spike": 0.025,  # Alert if above 2.5%
-    "latency_p95": 100,             # Alert if above 100ms
-    "error_rate": 0.001,            # Alert if above 0.1%
-}
-```
-
-**Retraining Triggers:**
-1. **Scheduled:** Weekly retraining with new data
-2. **Performance Drop:** PR-AUC drops below 0.85
-3. **Data Drift:** PSI exceeds 0.25
-4. **Concept Drift:** Fraud patterns change significantly
-5. **Manual:** After fraud investigation insights
+- Provide a single entry point (run_training_pipeline) that:
+  - Loads data
+  - Splits into train/val/test (stratified)
+  - Builds preprocessor
+  - Trains final XGBoost model
+  - Evaluates on validation
+  - Chooses threshold for required precision
+  - Saves fraud_model.pkl, preprocessor.pkl, threshold.json
+- Document end-to-end process in docs/pipeline.md
 
 ---
 
-## 🚀 Local Setup
+## 🧮 Validation Scheme
 
-### Prerequisites
-- Python 3.10 or higher
-- pip or conda
-- 4GB+ RAM
+- Dataset is split with stratified splits to preserve fraud ratio:
+  - Train / Validation / Test
+- Additionally:
+  - Hyperparameter tuning uses StratifiedKFold cross-validation (k=5)
+  - Main scoring metric in tuning: average_precision (PR-AUC)
+- Why this scheme?
+- Class imbalance is huge; we must maintain the same ratio in each split.
+- PR-AUC is more informative than ROC-AUC or accuracy.
+- StratifiedKFold ensures stable and reliable evaluation.
 
-### Installation Steps
+---
 
-1. **Clone the repository**
+## 🏆 Final Model vs Baseline (Template)
+
+After you run training and evaluation, fill in your actual numbers below.
+
+Baseline (Logistic Regression)
+
+- PR-AUC: X.XXX
+- ROC-AUC: Y.YYY
+- Recall @ threshold=0.5: Z.ZZ
+- Precision @ threshold=0.5: P.PP
+
+Final Model (XGBoost + tuned threshold)
+
+- PR-AUC: A.AAA
+- ROC-AUC: B.BBB
+- Recall @ business threshold (precision ≥ 0.90): C.CC
+- Precision @ business threshold: ≥ 0.90
+
+Improvement:
+
+- Final model significantly improves PR-AUC and recall compared to baseline.
+- Decision threshold is aligned with business requirements (precision constraint).
+
+---
+
+## 🏢 Business Alignment & Productionization
+
+Is the final model business-ready?
+- The model:
+  - Uses a decision threshold that ensures high precision (few false alerts)
+  - Maintains good recall (many frauds caught)
+- It can be integrated into:
+  - Real-time scoring service (API)
+  - Batch scoring pipelines
+
+How would this go to production?
+
+1.Serve the model as an API using the logic in src/inference.py.
+2.Connect transaction streams (from core banking) to the model.
+3.Log:
+- All predictions
+- Feedback labels (was it fraud or not?)
+4.Monitor:
+- Fraud recall on labeled feedback
+- Precision on flagged alerts
+- Volume of alerts per day
+- Drift in feature distributions (Time, Amount, PCA components)
+- Model latency / API errors
+5.Retrain regularly (e.g., monthly or quarterly) with new data.
+  
+---
+
+## 🌐 Deployment
+
+### Streamlit Frontend
+
+The project includes a Streamlit app in app/app.py:
+
+Features:
+
+- Single Transaction Mode
+  - Enter Time, Amount, and PCA values (or keep zeros for demo)
+  - Get fraud probability and decision (fraud / not fraud)
+- Batch Mode
+  - Upload CSV with Time, Amount, V1–V28
+  - Get predictions for all rows
+  - Download result as CSV
+
+How to run locally
 ```bash
-git clone https://github.com/yourusername/credit-card-fraud-detection.git
-cd credit-card-fraud-detection
-```
+# 1. Create and activate virtual environment (optional but recommended)
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 
-2. **Create virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. **Install dependencies**
-```bash
+# 2. Install dependencies
 pip install -r requirements.txt
-```
 
-4. **Download dataset**
-- Download from [Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
-- Place `creditcard.csv` in `data/raw/` folder
+# 3. Download dataset from Kaggle:
+#    Place `creditcard.csv` under data/raw/
+#    -> data/raw/creditcard.csv
 
-5. **Run the pipeline**
-```bash
-python src/pipeline.py
-```
+# 4. Train the model (creates files in /models)
+python -m src.pipeline
 
-6. **Launch Streamlit app**
-```bash
+# 5. Run the Streamlit app
 streamlit run app/app.py
+
 ```
+Online Deployment (optional for bootcamp)
 
-7. **Or launch FastAPI**
-```bash
-uvicorn app.api:app --reload
-```
+You can deploy using Streamlit Cloud:
 
-### Docker Setup
-```bash
-docker build -t fraud-detection .
-docker run -p 8501:8501 fraud-detection
-```
+- Push this repo to GitHub
+- Connect Streamlit Cloud to the repo
+- Set:
+  - Entry point: app/app.py
+  - Python version and requirements from requirements.txt
+- Add the live URL here:
 
-## 📈 Using the Model
+[Live Demo](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 
-### Quick Prediction (Python)
-```python
-from src.inference import FraudDetector
-
-detector = FraudDetector('models/final_model.pkl')
-prediction = detector.predict(transaction_data)
-print(f"Fraud Probability: {prediction['fraud_probability']:.2%}")
-print(f"Risk Level: {prediction['risk_level']}")
-```
-
-### API Request (curl)
-```bash
-curl -X POST "http://localhost:8000/predict" \
-  -H "Content-Type: application/json" \
-  -d '{"V1": -1.35, "V2": 1.57, ..., "Amount": 149.62}'
-```
 ---
 
-## 🧪 Testing
+## 🧪 Tests
 
+Basic tests are provided under tests/:
+
+- test_pipeline.py
+  - Runs the training pipeline and checks that:
+    - fraud_model.pkl
+    - preprocessor.pkl
+    - threshold.json
+      are created under /models.
+- test_inference.py
+  - Loads FraudModelService
+  - Checks single and batch predictions work as expected.
+- test_imports.py
+  - Simple sanity check that main modules can be imported.
+
+Run all tests with:
 ```bash
-# Run all tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ --cov=src --cov-report=html
+pytest -q
 ```
-## 📊 Model Performance Summary
 
-**Final Model: XGBoost Classifier**
+---
 
-| Aspect | Details |
-|--------|---------|
-| **Algorithm** | XGBoost with SMOTE |
-| **Features** | 42 (30 original + 12 engineered) |
-| **PR-AUC** | 0.89 |
-| **ROC-AUC** | 0.98 |
-| **Recall** | 87% |
-| **Precision** | 91% |
-| **F1-Score** | 0.86 |
-| **Inference Time** | 35ms (p95) |
+## 🧰 Technologies Used
+
+- Language: Python 3.x
+- Data / ML:
+  - pandas, numpy
+  - scikit-learn
+  - imbalanced-learn
+  - xgboost
+  - shap
+- Visualization:
+  - matplotlib, seaborn
+- Serving / App:
+  - Streamlit
+- Utilities:
+  - joblib
+  - pytest
 
 ---
 
@@ -455,10 +369,10 @@ pytest tests/ --cov=src --cov-report=html
 
 ## 📝 Documentation
 Detailed documentation available in `/docs`:
-- [EDA Findings](docs/EDA_findings.md)
-- [Feature Engineering](docs/feature_engineering.md)
-- [Model Evaluation](docs/evaluation_report.md)
-- [Deployment Guide](docs/deployment_guide.md)
+- [EDA Findings](docs/eda.md)
+- [Feature Engineering](docs/feature_eng.md)
+- [Model Evaluation](docs/evaluation.md)
+- [Model Optimization](docs/model_optimization.md)
 
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
