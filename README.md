@@ -374,6 +374,8 @@ Detailed documentation available in `/docs`:
 - [Model Evaluation](docs/evaluation.md)
 - [Model Optimization](docs/model_optimization.md)
 
+---
+
 ## 🗂️ Project Roadmap (TODO)
 
 ### ✅ Completed
